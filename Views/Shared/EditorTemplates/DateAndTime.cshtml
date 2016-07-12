@@ -1,0 +1,15 @@
+﻿@model DateTime
+
+@Html.TextBoxFor(x => x.Date, Model.ToString("dd.MM.yyyy"), new {@class = "calendar", maxlength="10", style = "width: 80px"})
+час 
+@Html.DropDownListFor(x => x.Hour, Enumerable.Range(0, 23).Select(i => new SelectListItem { Value = i.ToString(), Text = (i < 9 ? "0" + i.ToString() : i.ToString()) }))
+мин 
+@Html.DropDownListFor(x => x.Minute, Enumerable.Range(0, 59).Select(i => new SelectListItem { Value = i.ToString(), Text = (i < 9 ? "0" + i.ToString() : i.ToString()) }))
+<script>
+    $(".calendar").datepicker({
+        dateFormat: "dd.mm.yy",
+        monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+        dayNamesMin: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+        firstDay : 1
+    });
+</script>

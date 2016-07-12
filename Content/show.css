@@ -1,0 +1,72 @@
+﻿body
+{
+    font-family:Arial;
+     font-size:100%;
+}
+.item
+{
+    width:100%;
+    background-size:100% 100%;
+}
+.slimg
+{
+    width:100%;
+    border:10px solid white;
+}
+.sendinfo
+{
+    padding:3% 0 0 3%;
+    width:75%;
+    height:12%;
+    background-color:White;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-left:15%;
+}
+.sendlogo
+{
+    width:35%;
+    float:right;
+    background-color:White;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;    
+    border:8px solid white;
+    margin-top:-17%;
+    margin-right:-7%;
+}
+.sendinfo strong
+{
+    font-size:1.8em;
+}
+.sendinfo p
+{
+    font-size:1.4em;
+}
+.frominstainfo
+{
+    width:49%;
+    float:right;
+    text-align:center;
+    height:1px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+.frominstainfo img
+{
+    margin-top:15px;
+    width:40%;
+}
+.frominstainfo p
+{
+    font-size:1.6em;
+    color:White;
+    margin-top: 154px;
+}
+.frominstainfo strong
+{
+    font-size:6em;
+    color:White;
+    
+}

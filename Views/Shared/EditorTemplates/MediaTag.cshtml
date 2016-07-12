@@ -1,0 +1,14 @@
+﻿@model InstagramMVC.Models.MediaTag
+@if (Model != null)
+{
+    <div class="row" style="text-align: center">
+        <div class="row">
+            <img src="@Model.INSTAGRAM_MEDIA_LOW_RES_URL" class="@(Model.BAN ? "img-thumbnail error-bg" : "img-thumbnail")" id="@Model.MEDIA_ID" />
+        </div>        
+        <div class="row">
+            <img class="avatar" src="@Model.INSTAGRAM_USER_PROFILEPICTURE" />
+            <div class="row"><h4>@Model.INSTAGRAM_USER_NAME</h4></div>
+            <div class="row">@InstagramMVC.Globals.AppUtils.TimeAgo(Model.INSTAGRAM_MEDIA_CREATED_TIME)</div>
+        </div>
+    </div>
+}

@@ -1,0 +1,52 @@
+﻿@model InstagramMVC.Models.AccountModels.EnterModel
+@{
+    ViewBag.Title = "ВХОД";
+}
+@section BodyTopMix
+{
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<div class="row">
+    <div class="col-md-2 col-sm-2 col-xs-0 thumb" style="text-align: center;">
+        <a class="fancyimage" data-fancybox-group="group" title="Подпись к фотографии">
+            <img class="img-responsive" src="@Url.Content("~/Content/img/fig1.png")" />
+        </a>
+    </div>
+    <div class="col-md-8 col-sm-12 col-xs-12" style="text-align: center">
+        <div>                            
+            <p><label>Логин или e-mail:</label></p>
+            @Html.TextBoxFor(x => x.Login, new {@class = "form-control", style="width: 50%;display: inline;"})
+        </div>
+        <div>
+            @Html.ValidationMessageFor(x => x.Login)
+        </div>
+        <div>                            
+            <p><label>Пароль:</label></p>
+            @Html.PasswordFor(x => x.Password, new {@class = "form-control", style="width: 50%;display: inline;"})
+        </div>
+        <div>
+            @Html.ValidationMessageFor(x => x.Password)
+        </div>
+        <div>
+            @Html.CheckBoxFor(x => x.RememberMe) <label>Запомнить</label>
+        </div>
+        <div> 
+            <input type="submit" class="btn btn-success btn-lg" style="width: 25%" value="Вход" />
+            <a href="@Url.Action("SignIn", "Account")" style="width: 25%" class="btn btn-success btn-lg">Регистрация</a>
+        </div>
+    </div>
+    <div class="col-md-2 col-sm-2 col-xs-0 thumb" style="text-align: center;">
+        <a class="fancyimage" data-fancybox-group="group" title="Подпись к фотографии">
+            <img class="img-responsive" src="@Url.Content("~/Content/img/fig2.png")" />
+        </a>
+    </div>
+</div>
+}
+}
+@section scripts
+{
+<script>
+    $("#Login").focus();
+</script>    
+}

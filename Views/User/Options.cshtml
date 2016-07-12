@@ -1,0 +1,83 @@
+﻿@model InstagramMVC.Models.UserModel.UserOptions
+@{
+    Layout = "_UserLayout.cshtml";
+}
+@using (Html.BeginProfilePanel((InstagramMVC.Models.NavModel.TabPanel)Session["PROFILEPANEL"], 4))
+{
+@Html.OperationOutput(TempData["result"])    
+    using (Html.BeginForm("Options", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+    @Html.HiddenFor(x => x.USER_ID)
+    @Html.HiddenFor(x => x.USER_MAX_TAG_COUNT)
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+            <label>Кол-во хэштегов:</label>
+            </div>
+            <div class="col-md-1">
+            <label>@Model.USER_MAX_TAG_COUNT</label>            
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label>Период смены слайдов(сек.):</label>
+            </div>
+            <div class="col-md-1">
+            @Html.DropDownListFor(x => x.USER_SLIDE_ROTATION, Enumerable.Range(5, 16).Select(x => new SelectListItem()
+                                                                                                  {
+                                                                                                      Text = x.ToString() + " сек",
+                                                                                                      Value = x.ToString(),
+                                                                                                      Selected = x == Model.USER_SLIDE_ROTATION
+                                                                                                  }), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label>Кол-воu слайдов в запросе:</label>
+            </div>
+            <div class="col-md-1">
+                @Html.DropDownListFor(x => x.USER_SLIDE_BATCH_SIZE, Enumerable.Range(5, 11).Select(x => new SelectListItem()
+                                                                                                  {
+                                                                                                      Text = x.ToString() + " шт.",
+                                                                                                      Value = x.ToString(),
+                                                                                                      Selected = x == Model.USER_SLIDE_BATCH_SIZE
+                                                                                                  }), new { @class = "form-control" })
+            </div>
+        </div>
+        @if (InstagramMVC.DataManagers.UserManager.GetUserRole(Model.USER_ID) == InstagramMVC.Globals.AppEnums.Role.PremiumModerator.ToString())
+        {
+        <div class="row">
+            <div class="col-md-2">
+                <label>Фоновый рисунок:</label>
+            </div>
+            <div class="col-md-3">
+                <input type="file" class="form-control" name="bg_img" id="bg_img" />
+            </div>        
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-md-offset-2">
+            <img src="@Url.Content(Model.USER_BACKGROUND_IMG_URL)" width="100%" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label>Логотип:</label>
+            </div>
+            <div class="col-md-3">
+                <input type="file" class="form-control" name="lg_img" id="lg_img" />
+            </div>        
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-md-offset-2">
+            <img src="@Url.Content(Model.USER_LOGO_IMG_URL)" width="100%" />
+            </div>
+        </div>
+        }
+        <div class="row">
+            <div class="col-md-1">
+            <input type="submit" class="btn btn-success form-control" value="Сохранить" />
+            </div>
+        </div>
+    </div>
+    }
+}

@@ -1,0 +1,16 @@
+﻿@if (Request.IsAuthenticated)
+{
+using (Html.BeginForm("LogOff", "Account"))
+{
+    <strong>Добро пожаловать, @Request.RequestContext.HttpContext.User.Identity.Name.ToUpper()!</strong><br />
+    @Html.ActionLink("Профиль", "Index", "User")
+    if (HttpContext.Current.User.IsInRole("Admin"))
+    {
+        @Html.ActionLink(" Администрирование", "Index", "Admin")
+    }
+    <input type="submit" class="btn btn-success btn-lg" value="ВЫХОД" />            
+}
+}
+else{
+<a href="@Url.Action("Enter", "Account")" class="btn btn-success btn-lg">ВОЙТИ</a>
+}

@@ -1,0 +1,74 @@
+﻿@model IList<InstagramMVC.Models.AdminModels.Log>
+@{
+    Layout = "_AdminLayout.cshtml";
+    int page = (int)ViewData["page"];
+    int user_id = (int)ViewData["user_id"];
+    int event_id = (int)ViewData["event_id"];
+    string pager = Html.Pager((int)ViewData["page"], InstagramMVC.DataManagers.EventManager.GetLogEventTotalPages(user_id, event_id), x => Url.Action("Log", "Admin", new { page = x, user_id = user_id, event_id = event_id })).ToString();
+}
+@using (Html.BeginProfilePanel((InstagramMVC.Models.NavModel.TabPanel)Session["ADMINPANEL"], 4))
+{
+@Html.OperationOutput(TempData["result"])
+using (Html.BeginForm(new {controller = "Admin", action = "Log"}))
+{
+    @*<input type="hidden" value="@page" />*@
+    <div class="row">
+        <div class="form-group">
+            <div class=" col-md-3">
+                <label>Пользователь</label>
+                @Html.DropDownList("user_id", (IEnumerable<SelectListItem>)ViewBag.users, new { @class = "form-control", onChange="form.submit();" })
+            </div>
+            <div class="col-md-3 col-md-offset-6 text-right">
+                <label>Событие</label>
+                @Html.DropDownList("event_id", (IEnumerable<SelectListItem>)ViewBag.events, new { @class = "form-control", onChange="form.submit();" })
+            </div>
+        </div>
+    </div>
+}
+@Html.Raw(pager)
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td class="col-md-1" style="text-align: center;">
+                <label>№ записи</label>
+            </td>
+            <td class="col-md-2">
+                <label>Пользователь</label>
+            </td>
+            <td class="col-md-2">
+                <label>Событие</label>
+            </td>
+            <td class="col-md-2">
+                <label>Дата / Время</label>
+            </td>
+            <td class="col-md-5">
+                <label>Описание</label>
+            </td>
+        </tr>
+    </thead>
+@foreach (var evt in Model)
+{ 
+    <tr>
+        <td style="text-align: center">
+            <b>@(evt.LOG_ID).</b>
+        </td>
+        <td>
+            @evt.USER_NAME
+        </td>
+        <td>
+            @evt.EVENT_NAME
+        </td>
+        <td>
+            @evt.LOG_TIME
+        </td>
+        <td>
+            @evt.LOG_DESCRIPTION
+        </td>
+    </tr>
+}
+</table>
+@*    
+@Html.Pager((int)ViewData["page"], InstagramMVC.DataManagers.EventManager.GetLogEventTotalPages(user_id, event_id), x => Url.Action("Log", "Admin", new { page = x, user_id = user_id, event_id = event_id}))
+*@
+    @Html.Raw(pager)
+}

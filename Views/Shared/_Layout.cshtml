@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>    
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/bootstrap-theme.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/my-bs.css")" rel="stylesheet">
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("Header", required: false) 
+</head>
+<body>    
+    <header>
+        <div class="fon_header" style="background: url('@Url.Content("~/Content/img/header.png")'); background-size: cover; background-position: center;">            
+            <div class="container">
+                <div class="row" id="head">
+                    <div class="col-md-6 col-sm-12 col-xs-12" style="text-align: center;">
+                        <p>получить информацию можно по номеру</p>
+                        <p id="num">8(989)-658-91-19</p>
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-xs-12" style="text-align: right;">
+                        @Html.Partial("LoginVidget")
+                    </div>
+                </div>
+                <div class="row thumb" style="text-align: center;">
+                    <a href="@Url.Content("~/")" class="fancyimage" data-fancybox-group="group" title="Подпись к фотографии">
+                        <img class="img-responsive" src="@Url.Content("~/Content/img/logo.png")" />
+                    </a>
+                </div>
+                <div class="row" style="text-align: center;" id="head">
+                    <p><big>трансляция фотографий из инстаграма по хэштегам</big></p>
+                </div>
+                @RenderSection("BodyTopMix", required: false)
+            </div>
+        </div>
+    </header>
+    <div class="container" style="width: 100%">
+        <div class="row">
+            @RenderBody()
+        </div>
+    </div>
+    <footer style="background: url('@Url.Content("~/Content/img/footer.png")'); background-position: center;">
+        <div class="container">
+            <div class="row">
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-sm-5 col-xs-3 thumb">
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-6 thumb">
+                    <a class="fancyimage" data-fancybox-group="group" title="Подпись к фотографии" style="text-align: center;">
+                        <img class="img-responsive" src="@Url.Content("~/Content/img/logo2.png")" />
+                    </a>
+                </div>
+                <div class="col-md-5 col-sm-5 col-xs-3 thumb">
+                </div>
+            </div>
+            <br>
+            <div class="row" style="text-align: center;">
+                <p><span class="glyphicon glyphicon-earphone"></span><big>8(989)-658-91-19</big></p>
+            </div>
+        </div>
+    </footer>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

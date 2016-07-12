@@ -1,0 +1,12 @@
+﻿@section Header
+{
+    @RenderSection("Header", required: false)     
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Редактировать профиль";
+}
+<div class="container" style="width: 98%">
+    <h1>@ViewBag.Title</h1>
+    @RenderBody()
+</div>

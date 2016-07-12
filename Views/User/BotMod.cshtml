@@ -1,0 +1,88 @@
+﻿@model IList<InstagramMVC.Models.MediaTag>
+
+@{
+    Layout = null;
+    string user_login = HttpContext.Current.User.Identity.Name;
+    int page = (int)ViewData["page"];
+    string hashtag = (string)ViewData["hashtag"];
+    bool CanModerate = InstagramMVC.DataManagers.UserManager.CanUserModerateShow(user_login);
+    bool CanTranslate = InstagramMVC.DataManagers.UserManager.CanUserTranslateShow(user_login);
+    string pager = Html.Pager(page, InstagramMVC.DataManagers.HashTagManager.GetMediaTagsTotalPages(user_login, hashtag), x => Url.Action("BotMod", "User", new { hashtag = hashtag, page = x })).ToString();
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <title>Модерация медиатегов</title>
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/bootstrap-theme.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/my-bs.css")" rel="stylesheet">
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+<body>
+    <div class="container">
+        @Html.Raw(pager)
+        @for (int i = 0; i < Model.Count; i++)
+        { 
+        <div class="row">
+            <div class="col-xs-12" id="@string.Format("div{0}", Model[i].MEDIA_ID)" style="text-align: center; margin-top: 30px;">
+                @Html.EditorFor(X => X[i])
+                @if (CanModerate)
+                {
+                 <div class="row">
+                 @if (Model[i].BAN)
+                 {
+                    <span class="glyphicon glyphicon-thumbs-up btn banoff" title="Разрешить изображение" mediaid="@Model[i].MEDIA_ID" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-thumbs-down btn btn-warning banon" title="Запретить изображение" mediaid="@Model[i].MEDIA_ID" aria-hidden="true"></span>
+                 }
+                 else
+                 {
+                     <span class="glyphicon glyphicon-thumbs-up btn btn-success banoff" title="Разрешить изображение" mediaid="@Model[i].MEDIA_ID" aria-hidden="true"></span>
+                     <span class="glyphicon glyphicon-thumbs-down btn banon" title="Запретить изображение" mediaid="@Model[i].MEDIA_ID" aria-hidden="true"></span>
+                 }
+                     <span class="glyphicon glyphicon-remove btn btn-danger del" title="Удалить изображение" mediaid="@Model[i].MEDIA_ID" aria-hidden="true"></span>
+                </div>
+                }
+                <hr />
+            </div>
+        </div>
+        }
+        @Html.Raw(pager)
+    </div>
+   <script>
+    $(document).ready(function () {
+@if (CanModerate)
+{
+        @:$(".banon").click(function () {
+        @:    var media_id = $(this).attr("mediaid");
+        @:    $("#" + media_id).addClass("error-bg"); 
+        @:    $(this).addClass("btn-warning"); $(".banoff[mediaid=" + media_id + "]").removeClass("btn-success");
+        @:    $.post('@Url.Action("SetBan", "User")', { media_id: media_id, value: true });
+        @:});
+
+        @:$(".banoff").click(function () {
+        @:    var media_id = $(this).attr("mediaid");
+        @:    $("#" + media_id).removeClass("error-bg"); 
+        @:    $(this).addClass("btn-success"); $(".banon[mediaid=" + media_id + "]").removeClass("btn-warning");
+        @:    $.post('@Url.Action("SetBan", "User")', { media_id: media_id, value: false });
+        @:});
+
+        @:$(".del").click(function () {
+        @:    if (confirm('Вы действительно хотите удалить это изображение?')) {
+        @:      var media_id = $(this).attr("mediaid");
+        @:      $.post('@Url.Action("DelMedia", "User")', { media_id: media_id }); $("#div" + media_id).fadeOut("slow");
+        @:}
+        @:});
+}
+    });
+</script> 
+</body>
+</html>

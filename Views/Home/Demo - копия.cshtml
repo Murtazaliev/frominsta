@@ -1,0 +1,96 @@
+﻿@model string
+@{
+    Layout = null;
+    string demoTag = Model;
+}
+
+<!DOCTYPE html>
+<html>
+<head>    
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <title>Демонстрационная страница</title>
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/bootstrap-theme.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/show.css")" rel="stylesheet">
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @if (false) { <script src="../../Scripts/jquery-1.7.1-vsdoc.js" type="text/javascript"></script> }
+</head>
+<body style="background-image: url('@Url.Content("~/Content/img/show_bg.jpg")');">
+    <script>
+        $(document).ready(function () {
+            var demoUri = '@Url.RouteUrl(new { controller = "Home", action="DemoTags", tag = demoTag})';
+            var dc = '<div id="demoCarousel" class="carousel slide" style="margin: 5px 5px 0px 5px;" data-pause="false" data-interval="5000" data-ride="carousel">'+
+                     '</div>';
+            
+            //var crsl = $("#crsl");
+            var crsl = '<div class="carousel-inner" id="crsl"></div>';
+            var firstAct = true;
+            //$("#demoCarousel").carousel("pause");
+            
+            var jqxhr = $.getJSON(demoUri).
+            done(function (data) {
+                $.each(data, function (key, value) {
+                    var tbl = $('<table class="item' + (firstAct ? ' active' : '') + '">' +
+                                 '<tr>' +
+                                 '<td style="width: 51%;">' +
+                                 '<img src="' + value.Url + '" style="width: ' + ($(window).height() - 10) + 'px" class="slimg" alt="#" />' +
+                                 '</td>' +
+                                 '<td valign="bottom" style="width: 49%">' +
+                                 '<div class="sendinfo">' +
+                                 '<img src="' + value.UserProfileUrl + '" class="sendlogo" />' +
+                                 '<strong>' + value.User + '</strong>' +
+                                 '<p>' + value.Caption + '</p>' +
+                                 '</div>' +
+                                 '</td>' +
+                                 '</tr>' +
+                                 '</table>');
+                    
+                    //$(crsl).append('<table class="item'+ (firstAct ? ' active' : '')  +'">'+
+                    //             '<tr>'+
+                    //             '<td style="width: 51%;">'+
+                    //             '<img src="' + value.Url + '" style="width: ' + ($(window).height()-10) + 'px" class="slimg" alt="#" />' +
+                    //             '</td>'+
+                    //             '<td valign="bottom" style="width: 49%">'+
+                    //             '<div class="sendinfo">'+
+                    //             '<img src="'+ value.UserProfileUrl +'" class="sendlogo" />'+
+                    //             '<strong>'+ value.User +'</strong>'+
+                    //             '<p>'+ value.Caption +'</p>'+
+                    //             '</div>'+
+                    //             '</td>'+
+                    //             '</tr>'+
+                    //             '</table>');
+                    firstAct = false;
+                    $(crsl).append(tbl);
+                });
+            }
+            );
+
+            jqxhr.complete(function () {
+                $(crsl).append($("<div></div>"));
+                alert(crsl);
+                $("#demoCrsl").append(dc);
+                $("#demoCarousel").carousel();
+            })
+
+            $(window).bind('resize', function () {
+                $('.slimg').css('width', ($(window).height() - 10));
+            });
+        });
+    </script>
+    <div class="frominstainfo">
+        <a href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Content/img/show_logo.png")" /></a>
+        <br />
+        8(928)-561-38-38
+    <p>наш хэштег</p>
+        <strong><i>#@Model</i></strong>
+    </div>
+    <!--Карусель -->
+    <div id="demoCrsl"></div>
+    @*<div id="demoCarousel" class="carousel slide" style="margin: 5px 5px 0px 5px;" data-pause="false" data-interval="5000" data-ride="carousel">
+        <div class="carousel-inner" id="crsl">                                
+        </div>
+    </div>*@
+</body>
+</html>

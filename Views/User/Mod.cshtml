@@ -1,0 +1,250 @@
+﻿@model IList<InstagramMVC.Models.MediaTag>
+
+@{
+    Layout = "_UserLayout.cshtml";
+    string user_login = HttpContext.Current.User.Identity.Name;
+    string role = InstagramMVC.DataManagers.UserManager.GetUserRole(user_login);
+    bool canSelectActionTag = (role.Equals(InstagramMVC.Globals.AppEnums.Role.PremiumModerator.ToString()) && ((IEnumerable<SelectListItem>)ViewBag.tags).Count() > 1);
+    List<SelectListItem> aTags = ((IEnumerable<SelectListItem>)ViewBag.tags).ToList();
+    if (canSelectActionTag)
+    {
+        aTags.Remove(aTags.FirstOrDefault(x => x.Selected));
+        aTags.Add(new SelectListItem(){ Text = "Нет", Value = "", Selected = true});
+    }
+    int page = (int)ViewData["page"];
+    string hashtag = (string)ViewData["hashtag"];
+    bool CanModerate = InstagramMVC.DataManagers.UserManager.CanUserModerateShow(user_login);
+    bool CanTranslate = InstagramMVC.DataManagers.UserManager.CanUserTranslateShow(user_login);
+    string pager = Html.Pager(page, InstagramMVC.DataManagers.HashTagManager.GetMediaTagsTotalPages(user_login, hashtag),  x => Url.Action("Mod", "User", new {hashtag = hashtag, page = x})).ToString();
+}
+@using (Html.BeginProfilePanel((InstagramMVC.Models.NavModel.TabPanel)Session["PROFILEPANEL"], 3))
+{
+@Html.OperationOutput(TempData["result"])
+    if (CanTranslate)
+    {
+    <div class="row">
+    @if (ViewBag.tags != null)
+    { 
+    <div class="col-md-3 col-sm-6">
+        @Html.DropDownList("tags", null, new { @class = "form-control" })
+    </div>
+    }
+    else
+    {
+    <div>Список <a href="@Url.Action("Tags", "User")">тегов</a> пуст!</div>
+    }
+
+    @using (Html.BeginForm("UpdateMediaTags", "User", FormMethod.Post, new { id = "updFrm", onsubmit = "$('.btn').attr('disabled', 'true').val('ждите ...'); $('#hashtag').val($('#tags').val())" }))
+    {
+    <input type="hidden" name="hashtag" id="hashtag" />
+    <input type="hidden" name="updtype" id="updtype" />
+    <div class="col-md-1"><input type="button" class="btn btn-success" id="updbtn" onclick="javascript: $('#selUpdType').modal();" value="Обновить" /></div>
+    <div class="col-md-1"><input type="button" id="clearBtn" class="btn btn-success" value="Очистить" /></div>
+    <div class="col-md-1">
+        @if (canSelectActionTag)
+        {
+        <a href="javascript: void(0);" onclick="javascript: $('#selATag').modal();"  class="btn btn-success">Начать трансляцию</a>
+        }
+        else 
+        {
+        <a href="@Url.Action("Translate", "Show")"  class="btn btn-success">Начать трансляцию</a>
+        }
+    </div>
+    }
+    </div>
+    }
+    else
+    {
+@Html.OperationOutput(new InstagramMVC.Globals.OperationResult() { Status = InstagramMVC.Globals.AppEnums.OperationStatus.Warning, Message = "Ваш заказ не оплачен, либо истек период действия заказа!" });
+    }
+@Html.Raw(pager)
+<div class="row">
+    @for (int i = 0; i < Model.Count; i++)
+    { 
+    <div class="col-md-3 col-sm-6" id="@string.Format("div{0}", Model[i].MEDIA_ID)" style="text-align: center; margin-top: 30px;">
+        @Html.EditorFor(X => X[i])
+        @if (CanModerate)
+        {
+        <div class="row">
+            @if (Model[i].BAN)
+            {
+                <span class="glyphicon glyphicon-thumbs-up btn banoff" title="Разрешить изображение" mediaid="@Model[i].MEDIA_ID" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-thumbs-down btn btn-warning banon" title="Запретить изображение" mediaid="@Model[i].MEDIA_ID" aria-hidden="true"></span>
+            }
+            else
+            {
+                <span class="glyphicon glyphicon-thumbs-up btn btn-success banoff" title="Разрешить изображение" mediaid="@Model[i].MEDIA_ID" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-thumbs-down btn banon" title="Запретить изображение" mediaid="@Model[i].MEDIA_ID" aria-hidden="true"></span>
+            }
+            <span class="glyphicon glyphicon-remove btn btn-danger del" title="Удалить изображение" mediaid="@Model[i].MEDIA_ID" aria-hidden="true"></span>
+        </div>
+        }
+        <hr />
+    </div>    
+        if (i + 1 < Model.Count)
+        {            
+        <div class="col-md-3 col-sm-6" id="@string.Format("div{0}", Model[i + 1].MEDIA_ID)" style="text-align: center; margin-top: 30px">
+            @Html.EditorFor(X => X[i + 1])
+            @if (CanModerate)
+            {
+            <div class="row">
+            @if (Model[i + 1].BAN)
+            {
+                <span class="glyphicon glyphicon-thumbs-up btn banoff" title="Разрешить изображение" mediaid="@Model[i + 1].MEDIA_ID" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-thumbs-down btn btn-warning banon" title="Запретить изображение" mediaid="@Model[i + 1].MEDIA_ID" aria-hidden="true"></span>
+            }
+            else
+            {
+                <span class="glyphicon glyphicon-thumbs-up btn btn-success banoff" title="Разрешить изображение" mediaid="@Model[i + 1].MEDIA_ID" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-thumbs-down btn banon" title="Запретить изображение" mediaid="@Model[i + 1].MEDIA_ID" aria-hidden="true"></span>
+            }
+            <span class="glyphicon glyphicon-remove btn btn-danger del" title="Удалить изображение" mediaid="@Model[i + 1].MEDIA_ID" aria-hidden="true"></span>
+            </div>
+            }
+            <hr />
+        </div>
+        }
+        if (i + 2 < Model.Count)
+        {
+        <div class="col-md-3 col-sm-6" id="@string.Format("div{0}", Model[i + 2].MEDIA_ID)" style="text-align: center; margin-top: 30px">
+            @Html.EditorFor(X => X[i + 2])
+            @if (CanModerate)
+            {
+            <div class="row">
+            @if (Model[i + 2].BAN)
+            {
+                <span class="glyphicon glyphicon-thumbs-up btn banoff" title="Разрешить изображение" mediaid="@Model[i + 2].MEDIA_ID" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-thumbs-down btn btn-warning banon" title="Запретить изображение" mediaid="@Model[i + 2].MEDIA_ID" aria-hidden="true"></span>
+            }
+            else
+            {
+                <span class="glyphicon glyphicon-thumbs-up btn btn-success banoff" title="Разрешить изображение" mediaid="@Model[i + 2].MEDIA_ID" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-thumbs-down btn banon" title="Запретить изображение" mediaid="@Model[i + 2].MEDIA_ID" aria-hidden="true"></span>
+            }
+            <span class="glyphicon glyphicon-remove btn btn-danger del" title="Удалить изображение" mediaid="@Model[i + 2].MEDIA_ID" aria-hidden="true"></span>
+            </div>
+            }
+            <hr />     
+        </div>
+        }
+
+        if (i + 3 < Model.Count)
+        {
+        <div class="col-md-3 col-sm-6" id="@string.Format("div{0}", Model[i + 3].MEDIA_ID)" style="text-align: center; margin-top: 30px">
+            @Html.EditorFor(X => X[i + 3])
+            @if (CanModerate)
+            {
+            <div class="row">
+            @if (Model[i + 3].BAN)
+            {
+                <span class="glyphicon glyphicon-thumbs-up btn banoff" title="Разрешить изображение" mediaid="@Model[i + 3].MEDIA_ID" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-thumbs-down btn btn-warning banon" title="Запретить изображение" mediaid="@Model[i + 3].MEDIA_ID" aria-hidden="true"></span>
+            }
+            else
+            {
+                <span class="glyphicon glyphicon-thumbs-up btn btn-success banoff" title="Разрешить изображение" mediaid="@Model[i + 3].MEDIA_ID" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-thumbs-down btn banon" title="Запретить изображение" mediaid="@Model[i + 3].MEDIA_ID" aria-hidden="true"></span>
+            }            
+            <span class="glyphicon glyphicon-remove btn btn-danger del" title="Удалить изображение" mediaid="@Model[i + 3].MEDIA_ID" aria-hidden="true"></span>
+            </div>
+            }
+            <hr />     
+        </div>
+        }
+
+        i += 3;
+    }
+</div>
+@Html.Raw(pager)
+<script>
+    $(document).ready(function () {
+        $("#clearBtn").click(function () {
+            if (confirm('Вы действительно хотите очистить список медиатегов?'))
+            {
+                $('#waiting').modal();
+                window.location.href = "@Url.Action("ClearMediaTags", "User")" + "?hashtag=" + $('#tags').val();
+            }
+        })
+@if (CanModerate)
+{
+        @:$(".b").change(function () {
+        @:    var ban = this.checked;
+        @:    var media_id = $(this).attr("mediaid");
+        @:    if (ban) { $("#" + media_id).addClass("error-bg") } else { $("#" + media_id).removeClass("error-bg") }
+        @:    $.post('@Url.Action("SetBan", "User")', { media_id: media_id, value: ban });
+        @:});
+
+        @:$(".banon").click(function () {
+        @:    var media_id = $(this).attr("mediaid");
+        @:    $("#" + media_id).addClass("error-bg"); 
+        @:    $(this).addClass("btn-warning"); $(".banoff[mediaid=" + media_id + "]").removeClass("btn-success");
+        @:    $.post('@Url.Action("SetBan", "User")', { media_id: media_id, value: true });
+        @:});
+
+        @:$(".banoff").click(function () {
+        @:    var media_id = $(this).attr("mediaid");
+        @:    $("#" + media_id).removeClass("error-bg"); 
+        @:    $(this).addClass("btn-success"); $(".banon[mediaid=" + media_id + "]").removeClass("btn-warning");
+        @:    $.post('@Url.Action("SetBan", "User")', { media_id: media_id, value: false });
+        @:});
+
+        @:$(".del").click(function () {
+        @:    if (confirm('Вы действительно хотите удалить это изображение?')) {
+        @:      var media_id = $(this).attr("mediaid");
+        @:      $.post('@Url.Action("DelMedia", "User")', { media_id: media_id }); $("#div" + media_id).fadeOut("slow");
+        @:}
+        @:});
+}
+        $("#tags").change(function () {
+            var tag = this.value;
+            window.location.href = '@Url.Action("Mod", "User", new { hashtag = "" })' + '/' + tag;
+        });
+    });
+</script>
+}
+@Html.WaitingScreen(Url.Content("~/Content/img/ajaxclock.gif"))
+@if (canSelectActionTag)
+{
+using (Html.BeginForm("Translate", "Show", FormMethod.Post, new { id = "trFrm", name = "trFrm"}))
+{
+@Html.Hidden("hashtag")
+@:<div class="modal" id="selATag" role="dialog">
+@:    <div class="modal-dialog"">
+@:        <div class="modal-content">
+@:            <div class="modal-header">
+@:                <button type="button" class="close" data-dismiss="modal">&times;</button>
+@:                <h4 class="modal-title">Акционный хэштег</h4>
+@:            </div>
+@:            <div class="modal-body text-center">
+@:               <div class="row">
+@:                   <div class="col-md-5"><label>Выберите акционный хэштег</label></div>
+@:                   <div class="col-md-7">@Html.DropDownList("ahashtag", aTags, new { @class = "form-control" });</div>
+@:                 </div>
+@:            </div>
+@:            <div class="modal-footer">
+@:                <input type="button" onclick="javascript: $('#hashtag').val($('#tags').val()); trFrm.submit();" id="AOKBtn" class="btn btn-success" value="OK" style="width: 64px;" />
+@:                <input type="button" id="ACancelBtn" class="btn btn-success" value="Отмена" data-dismiss="modal" />
+@:            </div>
+@:        </div>
+@:    </div>
+@:</div>
+}
+}
+<div class="modal" id="selUpdType" role="dialog">
+    <div class="modal-dialog"">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Тип обновления</h4>
+            </div>
+            <div class="modal-body text-center">
+                <label class="radio-inline"><input type="radio" name="tp" @(Model.Count > 0 ? "" : "checked='checked'") value="@InstagramMVC.Globals.AppEnums.UpdateHashTagType.Recent30.ToString("d")"><strong>Новые 30 изображений</strong></label>
+                <label class="radio-inline"><input type="radio" name="tp" @(Model.Count > 0 ? "checked='checked'" : "") value="@InstagramMVC.Globals.AppEnums.UpdateHashTagType.FromLast30.ToString("d")"><strong>С последнего изображения</strong></label>
+            </div>
+            <div class="modal-footer">
+                <input type="button" id="OKBtn" class="btn btn-success" onclick="javascript: $('#updtype').val($('input[name=tp]:checked').val()); $('#selUpdType').hide(); $('#waiting').modal(); $('#updFrm').submit();" value="OK" style="width: 64px;" />
+                <input type="button" id="CancelBtn" class="btn btn-success" value="Отмена" data-dismiss="modal" />
+            </div>
+        </div>
+    </div>
+</div>

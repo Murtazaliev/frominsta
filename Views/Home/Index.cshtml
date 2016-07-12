@@ -1,0 +1,165 @@
+﻿@if (false) { <script src="../../Scripts/jquery-1.7.1-vsdoc.js" type="text/javascript"></script> }
+<script type="text/javascript">
+    function getDemoTags() {
+        window.location.href = '@Url.RouteUrl(new { controller = "Home", action="Demo"})' + '?tag=' + encodeURIComponent($("#demotag").val());
+    }    
+</script>
+                @section BodyTopMix
+                {
+                 <div class="row">
+                    <div class="col-md-2 col-sm-2 col-xs-0 thumb" style="text-align: center;">
+                        <a class="fancyimage" data-fancybox-group="group" title="Подпись к фотографии">
+                            <img class="img-responsive" src="@Url.Content("~/Content/img/fig1.png")" />
+                        </a>
+                    </div>
+                    <div class="col-md-8 col-sm-12 col-xs-12" style="text-align: center;" id="searh">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon" id="basic-addon1">#</span>
+                            <input type="text" id="demotag" class="form-control" placeholder="хэштег">
+                            <span class="input-group-btn">
+                                <button class="btn btn-success btn-lg" id="tagbtn" type="button" onclick="getDemoTags();">ДЕМО</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-0 thumb" style="text-align: center;">
+                        <a class="fancyimage" data-fancybox-group="group" title="Подпись к фотографии">
+                            <img class="img-responsive" src="@Url.Content("~/Content/img/fig2.png")" />
+                        </a>
+                    </div>
+                 </div>   
+                 }
+    <div class="main">
+        <div class="menu">
+            <div class="container">
+                <div class="row">
+                    <p class="pp" style="text-align: center;">Как это работает?</p>
+                    <div class="col-md-3 col-sm-6 col-xs-6" style="text-align: center;">
+                        <img src="content/img/F1.png" alt="" class="img-circle img-responsive">
+                        <p class="text-primary">1. Сделайте интересное  фото</p>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-6" style="text-align: center;">
+                        <img src="content/img/F2.png" alt="" class="img-circle img-responsive">
+                        <p class="text-primary">2. Войдите в Инстаграм под своим логином</p>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-6" style="text-align: center;">
+                        <img src="content/img/F3.png" alt="" class="img-circle img-responsive">
+                        <p class="text-primary">3. Разместите фото с хэштегом вашего мероприятия</p>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-6" style="text-align: center;">
+                        <img src="content/img/F4.png" alt="" class="img-circle img-responsive">
+                        <p class="text-primary ">4. Теперь все увидят ваше  фото!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="aside">
+        <div class="container">
+            <div class="row">
+                <p class="pp" style="text-align: center;">Где это можно использовать?</p>
+                <div class="col-md-2 col-sm-2 col-xs-0 thumb">
+                    <a class="fancyimage" data-fancybox-group="group" title="Подпись к фотографии">
+                        <img class="img-responsive" src="content/img/fig3.png" />
+                    </a>
+                </div>
+                <div class="col-md-8 col-sm-8 col-xs-12" style="text-align: center;">
+                    <!--Карусель -->
+                    <div id="myCarousel" class="carousel slide" data-interval="3000" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#myCarousel" data-slide-to="1"></li>
+                            <li data-target="#myCarousel" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner" id="crsl">
+                            <!--1-->
+                            <div class="active item">
+                                <div class="carousel-caption">
+                                    <p class="lead">...</p>
+                                </div>
+                                <img src="content/img/men.png" alt="140x140">
+                            </div>
+                            <!--2-->
+                            <div class="item">
+                                <div class="carousel-caption">
+                                    <p class="lead">...</p>
+                                </div>
+                                <img src="content/img/men.png" alt="140x140">
+                            </div>
+                            <!--3-->
+                            <div class="item">
+                                <div class="carousel-caption">
+                                    <p class="lead">...</p>
+                                </div>
+                                <img src="content/img/men.png" alt="140x140">
+                            </div>
+                        </div>
+                        <a class="carousel-control left" href="#myCarousel" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </a>
+
+                        <a class="carousel-control right" href="#myCarousel" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-0" style="text-align: center;">
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class="aside2">
+            <div class="container">
+                <div class="row">
+                    <p class="pp" style="text-align: center;">Сколько это стоит?</p>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="block1">
+                            <p class="gl" style="text-align: center;">Standart</p>
+                            <p class="gz" style="text-align: center;">6 часов</p>
+                            <p class="gt">- Смена хэштега</p>
+                            <p class="gtp">- Фотоархив на носителе</p>
+                            <p class="foot" style="text-align: center;">3999 руб.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="block2">
+                            <p class="gl" style="text-align: center;">Premium</p>
+                            <p class="gz" style="text-align: center;">24 часа</p>
+                            <p class="gt">- Модерация</p>
+                            <p class="gt">- Смена хэштега </p>
+                            <p class="gt">- Фотоархив на носителе</p>
+                            <p class="gtp">- Выбор стиля</p>
+                            <p class="foot" style="text-align: center;">5999 руб.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="block3">
+                            <p class="gl" style="text-align: center;">Lux</p>
+                            <p class="gz" style="text-align: center;">7 суток</p>
+                            <p class="gt">- Модерация </p>
+                            <p class="gt">- Смена хэштега </p>
+                            <p class="gt">- Выбор стиля</p>
+                            <p class="gt">- Брендированный дизайн</p>
+                            <p class="foot" style="text-align: center;">14999 руб.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-1 col-xs-1">
+                </div>
+                <div class="col-md-10 col-sm-10 col-xs-10 thumb" style="text-align: center;">
+                    <div id="leg">
+                        <a class="fancyimage" data-fancybox-group="group" title="Подпись к фотографии">
+                            <img class="img-responsive" src="content/img/leg.png" />
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-1 col-xs-1">
+                </div>
+        </div>
+    </div>
+        <div>
+            <p style="text-align: center;">Внимание! Цены указанные выше учитываются при условии если вы используйте свое оборудование и модератора!</p>
+        </div>
+    </div>
+    
+
+

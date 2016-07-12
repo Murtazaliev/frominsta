@@ -1,0 +1,90 @@
+﻿@model InstagramMVC.Models.AccountModels.RegisterModel
+
+@{
+    ViewBag.Title = "Регистрация";
+}
+<div class="well well-lg">
+<h2>@ViewBag.Title</h2>
+@Html.OperationOutput(TempData["result"])
+<div class="form-group">
+@using (Html.BeginForm())
+{
+<div class="row">
+    <div>
+        <label>Логин:</label>
+    </div>
+    <div class="col-md-3">
+        @Html.TextBoxFor(x => x.Login, new { @class = "form-control"})
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>E-Mail:</label>
+    </div>
+    <div class="col-md-3">
+        @Html.TextBoxFor(x => x.EMail, new { @class = "form-control"})
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>Фамилия:</label>
+    </div>
+    <div class="col-md-3">
+        @Html.TextBoxFor(x => x.LastName, new { @class = "form-control"})
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>Имя:</label>
+    </div>
+    <div class="col-md-3">
+        @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control" })
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>Отчество:</label>
+    </div>
+    <div class="col-md-3">
+        @Html.TextBoxFor(x => x.Patr, new { @class = "form-control"})
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>Телефон:</label>
+    </div>
+    <div class="col-md-3">
+        @Html.TextBoxFor(x => x.Phone, new { @class = "form-control"})
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>Пароль:</label>
+    </div>
+    <div class="col-md-3">
+        @Html.PasswordFor(x => x.NewPassword, new { @class = "form-control"})
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>Подтверждение пароля:</label>
+    </div>
+<div class="col-md-3">
+    @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control"})
+</div>
+</div>
+<div class="row">
+    @Html.ValidationSummary()
+</div>
+<div class="row"><br />
+    <input type="submit" class="btn btn-success btn-lg" value="Регистрация" />
+</div>
+}
+</div>
+</div>
+@section scripts
+{
+<script>
+    $("#Login").focus();
+</script>    
+}

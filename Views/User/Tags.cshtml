@@ -1,0 +1,144 @@
+﻿@using InstagramMVC.Models.UserModel;
+@using InstagramMVC.DataManagers;
+@using System.Web;
+
+@model IList<InstagramMVC.Models.UserModel.HashTag>
+@{
+    Layout = "_UserLayout.cshtml";
+    bool IsActivetag = false;
+    UserOptions opts = (Session["OPTIONS"] == null ? 
+                        UserManager.GetUserOptions(HttpContext.Current.User.Identity.Name):
+                        (UserOptions)Session["OPTIONS"]);
+    string user_login = HttpContext.Current.User.Identity.Name;
+    string role = InstagramMVC.DataManagers.UserManager.GetUserRole(user_login);
+    bool canSelectActionTag = (role.Equals(InstagramMVC.Globals.AppEnums.Role.PremiumModerator.ToString()) && (Model.Count() > 1));
+    List<SelectListItem> aTags = Model.Select(x => new SelectListItem() { Text = x.TAG_CAPTION, Value = x.TAG_CAPTION }).ToList();
+    if (canSelectActionTag)
+    {
+        aTags.Remove(aTags.FirstOrDefault(x => x.Value.Equals((string)Session["ACTIVETAG"], StringComparison.InvariantCultureIgnoreCase)));
+        aTags.Add(new SelectListItem() { Text = "Нет", Value = "", Selected = true });
+    }                        
+}
+@using (Html.BeginProfilePanel((InstagramMVC.Models.NavModel.TabPanel)Session["PROFILEPANEL"], 1))
+{ 
+if (Model.Count == 0)
+{ 
+@Html.OperationOutput(new InstagramMVC.Globals.OperationResult() { Message = "Список хэштегов пуст!", Status = InstagramMVC.Globals.AppEnums.OperationStatus.Warning})
+@Html.OperationOutput(TempData["result"])
+if (Model.Count < opts.USER_MAX_TAG_COUNT)
+{
+using (Html.BeginForm("AddTag", "User"))
+{
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-1" style="width: 175px">
+            <label>Добавить хэштег #</label>
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" name="hashtag" id="hashtag" />
+        </div>
+        <div class="col-md-1">
+            <input type="submit" class="form-control btn btn-success" value="Добавить" />
+        </div>
+    </div>
+</div>
+}
+}
+}
+else
+{
+@Html.OperationOutput(TempData["result"])
+if (Model.Count < opts.USER_MAX_TAG_COUNT)
+{
+using (Html.BeginForm("AddTag", "User"))
+{
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-1" style="width: 175px">
+            <label>Добавить хэштег #</label>
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" name="hashtag" id="hashtag" />
+        </div>
+        <div class="col-md-1">
+            <input type="submit" class="form-control btn btn-success" value="Добавить" />
+        </div>
+    </div>
+</div>
+}
+}
+@(Session["ACTIVETAG"] == null ? 
+Html.Raw("<div class='panel panel-danger'>"+
+"<div class='panel-heading'>Для текущей сесси нет активных хэштегов</div>")
+: 
+Html.Raw("<div class='panel panel-info'>"+
+"<div class='panel-heading'>Для текущей сесси активен хэштег #" + (string)Session["ACTIVETAG"] + "</div>")
+)
+<table class="table">
+@for (int i = 0; i < Model.Count; i++)
+{
+    IsActivetag = string.Compare(Model[i].TAG_CAPTION, (string)Session["ACTIVETAG"], true) == 0;
+    <tr>
+        <td style="width: 20px">@(i+1).</td>
+        <td>@Html.Raw((IsActivetag ?  string.Format("<b>{0}</b>", Model[i].TAG_CAPTION)  : Model[i].TAG_CAPTION))</td>
+        <td style="width: 20px">
+            @if (!IsActivetag)
+            {
+                using (Html.BeginForm("SelTag", "User"))
+                { 
+                @Html.Hidden("hashtag", Model[i].TAG_CAPTION)
+                <input type="image" name="submit" src="@Url.Content("~/Content/img/confirm.gif")" border="0" title="Активировать" alt="Submit" />
+                }
+            }
+        </td>
+        <td style="width: 20px">
+            @using (Html.BeginForm("DelTag", "User"))
+            { 
+                @Html.Hidden("hashtag", Model[i].TAG_CAPTION)
+                <input type="image" name="submit" src="@Url.Content("~/Content/img/del.gif")" border="0" title="Удалить" alt="Submit" />
+            }
+        </td>
+    </tr>
+}
+</table>
+@Html.Raw("</div>")
+}
+if (Session["ACTIVETAG"] != null)
+{
+if (canSelectActionTag)
+{
+using (Html.BeginForm("Translate", "Show", FormMethod.Post, new { id = "trFrm", name = "trFrm"}))
+{
+@:<div class="modal" id="selATag" role="dialog">
+@:    <div class="modal-dialog"">
+@:        <div class="modal-content">
+@:            <div class="modal-header">
+@:                <button type="button" class="close" data-dismiss="modal">&times;</button>
+@:                <h4 class="modal-title">Акционный хэштег</h4>
+@:            </div>
+@:            <div class="modal-body text-center">
+@:               <div class="row">
+@:                   <div class="col-md-5"><label>Выберите акционный хэштег</label></div>
+@:                   <div class="col-md-7">@Html.DropDownList("ahashtag", aTags, new { @class = "form-control" });</div>
+@:                 </div>
+@:            </div>
+@:            <div class="modal-footer">
+@:                <input type="button" onclick="javascript: trFrm.submit();" id="AOKBtn" class="btn btn-success" value="OK" style="width: 64px;" />
+@:                <input type="button" id="ACancelBtn" class="btn btn-success" value="Отмена" data-dismiss="modal" />
+@:            </div>
+@:        </div>
+@:    </div>
+@:</div>
+}
+}
+if (canSelectActionTag)
+{ 
+<a href="javascript: void(0);" onclick="javascript: $('#selATag').modal();" class='btn btn-success'>Начать трансляцию</a>
+}
+else
+{
+<a href="@Url.Action("Translate", "Show")" class='btn btn-success'>Начать трансляцию</a>
+}
+}
+}
+

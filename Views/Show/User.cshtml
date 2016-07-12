@@ -1,0 +1,77 @@
+﻿@model IList<InstagramMVC.Models.Show>
+
+@{
+    ViewBag.Title = "Заказы пользователя";
+    bool IsAdmin = HttpContext.Current.User.IsInRole("Admin");
+    if (!IsAdmin)
+    {
+        Layout = Url.Content("~/Views/User/_UserLayout.cshtml");
+    }
+}
+@using (Html.BeginProfilePanel(IsAdmin ? null : (InstagramMVC.Models.NavModel.TabPanel)Session["PROFILEPANEL"], 2))
+{
+if ((Model == null) || (Model.Count == 0))
+{
+    <label class='alert alert-danger'>У пользователя нет заказов!</label>
+}
+else
+{
+@Html.OperationOutput(TempData["result"])
+<table class="table">
+    <tr>
+        <td style="width: 150px"><label>№ заказа</label></td>
+        <td><label>Начало</label></td>
+        <td><label>Конец</label></td>
+        <td><label>Модерация</label></td>
+        @if (IsAdmin)
+        { 
+        <td><label>Оплачено</label></td>
+        }        
+        <td></td>
+        <td></td>
+    </tr>
+    @foreach (var show in Model)
+    { 
+    <tr>
+        <td>@show.SHOW_ID</td>
+        <td>@show.SHOW_START</td>
+        <td>@show.SHOW_END</td>
+        @if (IsAdmin)
+        { 
+        <td>@Html.CheckBox("mod", @show.ALLOWMOD, new { showid = @show.SHOW_ID})</td>
+        <td>@Html.CheckBox("paid", @show.PAID, new { showid = @show.SHOW_ID})</td>
+        }
+        else
+        {
+        <td>@Html.CheckBox("mod", @show.ALLOWMOD, new { disabled = "disabled"})</td>
+        }
+        <td>@Html.ActionLink("Редактировать", "Edit", new {controller = "Show", show_id = show.SHOW_ID })</td>
+        <td style="width: 50px"><a href="@Url.Action("Delete", new { controller = "Show", show_id = show.SHOW_ID })" onclick="javascript: return confirm('Вы действительно хотите удалить заказ?');">
+                <img src="@Url.Content("~/Content/img/del.gif")" alt="Удалить" title="Удалить" />
+            </a>
+        </td>
+    </tr>
+    }
+</table>
+}
+<a href="@Url.Action("Add", new { controller = "Show", user_login = (IsAdmin ? ViewContext.RouteData.Values["user_login"] : HttpContext.Current.User.Identity.Name)})" class="btn btn-success">Добавить заказ</a>
+if (IsAdmin)
+{ 
+    <a href="@Url.Action("EditUsers", "Admin")" class="btn btn-success">Отменить</a>
+    @:
+<script>
+    $(document).ready(function () {
+        $("input:checkbox[name='paid']").change(function () {
+            var c = this.checked;
+            var show_id = $(this).attr("showid");
+            $.post('@Url.Action("SetPaid", "Admin")', { show_id: show_id, value: c });
+        });
+        $("input:checkbox[name='mod']").change(function () {
+            var c = this.checked;
+            var show_id = $(this).attr("showid");
+            $.post('@Url.Action("SetMod", "Admin")', { show_id: show_id, value: c });
+        });
+    });
+</script>    
+}
+}

@@ -1,0 +1,82 @@
+﻿@model IList<InstagramMVC.Models.AppUser>
+@{
+    Layout = "_AdminLayout.cshtml";
+}
+@using (Html.BeginProfilePanel((InstagramMVC.Models.NavModel.TabPanel)Session["ADMINPANEL"], 3))
+{
+    if (Model.Count == 0)
+    { 
+        @Html.OperationOutput(new InstagramMVC.Globals.OperationResult() { Message = "Список пуст!", Status = InstagramMVC.Globals.AppEnums.OperationStatus.Warning });
+        return;
+    }
+@Html.OperationOutput(TempData["result"])
+    <table class="table">
+    <thead>
+        <tr>
+            <td style="width: 20px;">
+                <label>№</label>
+            </td>
+            <td>
+                <label>Логин</label>
+            </td>
+            <td>
+                <label>Права</label>
+            </td>
+            <td>
+                <label>E-Mail</label>
+            </td>
+            <td>
+                <label>Фамилия</label>
+            </td>
+            <td>
+                <label>Имя</label>
+            </td>
+            <td>
+                <label>Отчество</label>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+@for (int i = 0; i < Model.Count; i++ )
+{ 
+    <tr>
+        <td>
+            @(i+1).
+        </td>
+        <td>
+            @Model[i].USER_LOGIN
+        </td>
+        <td>
+            @InstagramMVC.DataManagers.UserManager.GetUserRole(Model[i].USER_ID)
+        </td>
+        <td>
+            @Model[i].USER_EMAIL
+        </td>
+        <td>
+            @Model[i].USER_LASTNAME
+        </td>
+        <td>
+            @Model[i].USER_FIRSTNAME
+        </td>
+        <td>
+            @Model[i].USER_PATR
+        </td>
+        <td style="width: 20px">
+            @using (Html.BeginForm(new {controller = "Admin", action = "SetAdmin", value = "false"}))
+            { 
+                @Html.Hidden("id", Model[i].USER_ID)
+                <input type="image" name="submit" src="@Url.Content("~/Content/img/warn.png")" width="20" height="20" border="0" title="Забрать права администратора" alt="Submit" onclick="javascript: return confirm('Вы действительно хотите забрать права администратора?')" />
+            }
+        </td>
+        <td style="width: 20px">
+            @using (Html.BeginForm("DeleteUser", "Admin"))
+            { 
+                @Html.Hidden("id", Model[i].USER_ID)
+                <input type="image" name="submit" src="@Url.Content("~/Content/img/del.gif")" border="0" title="Удалить" alt="Submit" onclick="javascript: return confirm('Вы действительно хотите удалить пользователя?')" />
+            }
+        </td>
+    </tr>
+}
+</table>
+}

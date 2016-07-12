@@ -1,0 +1,13 @@
+﻿@model InstagramMVC.Models.InstagramModels.UserInfo
+<table>
+@if (!string.IsNullOrEmpty(Model.ProfilePicture))
+{ 
+    <tr>
+        <td colspan="2"><img src="@Model.ProfilePicture" style="height: 100px; width: 100px" /></td>
+    </tr>
+}
+    <tr>
+        <td>Пользователь:</td>
+        <td>@Model.Username</td>
+    </tr>
+</table>

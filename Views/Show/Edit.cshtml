@@ -1,0 +1,59 @@
+﻿@model InstagramMVC.Models.Show
+
+@{
+    ViewBag.Title = "Редактирование заказа";
+    bool IsAdmin = HttpContext.Current.User.IsInRole("Admin");
+}
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("Edit", "Show"))
+{ 
+    @Html.HiddenFor(x => x.USER_ID)
+    @Html.HiddenFor(x => x.SHOW_ID)
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-1">
+            Начало:
+        </div>
+        <div class="col-md-5">
+        @Html.EditorFor(x => x.SHOW_START)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1">
+            Конец:
+        </div>
+        <div class="col-md-5">
+            @Html.EditorFor(x => x.SHOW_END)
+        </div>
+    </div>
+    @if (IsAdmin)
+    { 
+    <div class="row">
+        <div class="col-md-1">
+            Модерация:
+        </div>
+        <div class="col-md-5">
+            @Html.CheckBoxFor(x => x.ALLOWMOD)
+        </div>
+    </div>
+    <div class="row">
+        <div  class="col-md-1">
+            Оплачено:
+        </div>
+        <div class="col-md-5">
+            @Html.CheckBoxFor(x => x.PAID)
+        </div>
+    </div>
+    }
+</div>
+    if (!Model.PAID || IsAdmin )
+    {
+<input type="submit" class="btn btn-success" value="Сохранить" />
+    }
+<a href="@Url.Action("User", new { user_login = (ViewContext.RouteData.Values["user_login"] == null ? 
+                                                 InstagramMVC.DataManagers.UserManager.GetUser(Model.USER_ID).USER_LOGIN : 
+                                                 ViewContext.RouteData.Values["user_login"])
+                                         }
+                )" class="btn btn-success">Отменить</a>
+}

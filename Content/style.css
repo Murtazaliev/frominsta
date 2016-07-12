@@ -1,0 +1,63 @@
+.menu{background:#f1f1f1;border-bottom:2px solid #bbb;}
+p.pp{color:#6E6E6E;font:normal 24px Areal,palatino,serif;margin:20px;}
+
+#head{margin-top:20px;font:normal 22px Areal,palatino,serif;}
+#num{font:normal 44px Areal,palatino,serif;}
+#searh{margin-top:40px;margin-bottom:20px;}
+.input-group input{height:46px;font-size: 20px;}
+
+.fon_header{height:auto;width:100%;}
+
+.block1{background:#f9f9f9;border:3px solid #0a8c00;border-radius:5px;margin:10%;padding:15px 5% 15px 5% ;}
+.block1 p.gl{color:#0a8c00;font:normal 28px Areal,palatino,serif;}
+.block1 p.gz{color:#68879a;font:normal 24px Areal,palatino,serif;margin-top:5%;margin-bottom:10%;}
+.block1 p.gt{margin-left:10px;color:#6E6E6E;font:normal 18px Areal,palatino,serif;}
+.block1 p.gtp{margin-left:10px;margin-bottom:30%;color:#6E6E6E;font:normal 18px Areal,palatino,serif;}
+.block1 p.foot{color:#68879a;font:normal 24px Areal,palatino,serif;margin-top:10%;}
+
+.block2{background:#f1f1f1;border:3px solid #20263c;border-radius:5px;margin:10%;padding:15px 5% 15px 5% ;}
+.block2 p.gl{color:#20263c;font:normal 28px Areal,palatino,serif;}
+.block2 p.gz{color:#68879a;font:normal 24px Areal,palatino,serif;margin-top:5%;margin-bottom:10%;}
+.block2 p.gt{margin-left:10px;color:#6E6E6E;font:normal 18px Areal,palatino,serif;}
+.block2 p.gtp{margin-left:10px;margin-bottom:0px;color:#6E6E6E;font:normal 18px Areal,palatino,serif;}
+.block2 p.foot{color:#68879a;font:normal 24px Areal,palatino,serif;margin-top:5%;}
+
+.block3{background:#f0f5ff;border:3px solid #ffba00;border-radius:5px;margin:10%;padding:15px 5% 15px 5% ;}
+.block3 p.gl{color:#ffba00;font:normal 28px Areal,palatino,serif;}
+.block3 p.gz{color:#68879a;font:normal 24px Areal,palatino,serif;margin-top:5%;margin-bottom:10%;}
+.block3 p.gt{margin-left:10px;color:#6E6E6E;font:normal 18px Areal,palatino,serif;}
+.block3 p.gtp{margin-left:10px;margin-bottom:40px;color:#6E6E6E;font:normal 18px Areal,palatino,serif;}
+.block3 p.foot{color:#68879a;font:normal 24px Areal,palatino,serif;bottom:0;}
+
+#leg{border-bottom:3px solid #f5f5f5;padding-bottom:5px;margin-bottom:10px;}
+
+@media screen and (max-width: 768px) { #fig { display:none; } }
+
+.item{
+    background: #333;    
+    text-align: center;
+    height: 300px !important;
+}
+.carousel2{
+	margin: 20px 0;
+}
+.control-buttons{
+	text-align:center;
+}
+.examplecarusel{
+	margin: 20px;
+} 
+   h2{
+    margin: 0;     
+    color: #666;
+    padding-top: 90px;
+    font-size: 52px;
+    font-family: "trebuchet ms", sans-serif;    
+}
+.avatar
+{
+    width:100px;
+    height:100px;
+    border-radius:50%; 
+    border:2px solid white;
+}
